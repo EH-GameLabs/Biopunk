@@ -22,19 +22,19 @@ ACombatDummy::ACombatDummy()
 	Dummy = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Dummy"));
 	Dummy->SetupAttachment(RootComponent);
 
-	Dummy->SetSimulatePhysics(true);
+	// Dummy->SetSimulatePhysics(true);
 
 	// create the physics constraint
-	PhysicsConstraint = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("Physics Constraint"));
-	PhysicsConstraint->SetupAttachment(RootComponent);
-
-	PhysicsConstraint->SetConstrainedComponents(BasePlate, NAME_None, Dummy, NAME_None);
+	// PhysicsConstraint = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("Physics Constraint"));
+	// PhysicsConstraint->SetupAttachment(RootComponent);
+	//
+	// PhysicsConstraint->SetConstrainedComponents(BasePlate, NAME_None, Dummy, NAME_None);
 }
 
 void ACombatDummy::ApplyDamage(float Damage, AActor* DamageCauser, const FVector& DamageLocation, const FVector& DamageImpulse)
 {
 	// apply impulse to the dummy
-	Dummy->AddImpulseAtLocation(DamageImpulse, DamageLocation);
+	// Dummy->AddImpulseAtLocation(DamageImpulse, DamageLocation);
 
 	// call the BP handler
 	BP_OnDummyDamaged(DamageLocation, DamageImpulse.GetSafeNormal());
