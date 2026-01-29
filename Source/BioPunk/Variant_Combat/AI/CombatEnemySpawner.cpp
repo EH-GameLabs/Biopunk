@@ -64,6 +64,8 @@ void ACombatEnemySpawner::SpawnEnemy()
 		{
 			// subscribe to the death delegate
 			SpawnedEnemy->OnEnemyDied.AddDynamic(this, &ACombatEnemySpawner::OnEnemyDied);
+			//TEST
+			SpawnedEnemy->CanTarget = true;
 		}
 	}
 }

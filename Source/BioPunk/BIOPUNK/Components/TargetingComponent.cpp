@@ -3,6 +3,7 @@
 
 #include "BIOPUNK/Components/TargetingComponent.h"
 
+#include "CombatEnemy.h"
 #include "KismetTraceUtils.h"
 #include "BIOPUNK/Interfaces/TargetableInterface.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -24,6 +25,14 @@ void UTargetingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	if (!CurrentTarget) return;
+	
+	ACombatEnemy* testEnemy = Cast<ACombatEnemy>(CurrentTarget);
+	if (IsValid(testEnemy) && !testEnemy->CanTarget)
+	{
+		CurrentTarget = nullptr;
+		DisableLock();
+		return;
+	}
 
 	// --- VALIDATION PHASE ---
     
@@ -83,11 +92,10 @@ void UTargetingComponent::ToggleLock()
 
 AActor* UTargetingComponent::FindBestTarget()
 {
-	AActor* Target = nullptr;
-	
 	// 1. Setup per SphereOverlap
 	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
 	ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Visibility)); // O il tuo canale 'Enemy'
+	ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_PhysicsBody));
 	TArray<AActor*> ActorsToIgnore;
 	ActorsToIgnore.Add(GetOwner());
 	TArray<AActor*> OutActors;

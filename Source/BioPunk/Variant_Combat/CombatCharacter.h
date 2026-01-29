@@ -311,4 +311,10 @@ public:
 	//TEST
 	UPROPERTY(BlueprintReadWrite, Category="Components")
 	float AttackSpeed = 1;
+	
+	UPROPERTY(BlueprintReadWrite, Category="Components")
+	bool HasCombo = false;
+	
+	UPROPERTY(BlueprintReadWrite, Category="Components")
+	float BarDamage;
 };

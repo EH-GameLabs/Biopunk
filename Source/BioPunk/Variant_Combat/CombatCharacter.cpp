@@ -277,9 +277,9 @@ void ACombatCharacter::DoAttackTrace(FName DamageSourceBone)
 			{
 				// knock upwards and away from the impact normal
 				const FVector Impulse = (CurrentHit.ImpactNormal * -MeleeKnockbackImpulse) + (FVector::UpVector * MeleeLaunchImpulse);
-
+				
 				// pass the damage event to the actor
-				Damageable->ApplyDamage(MeleeDamage, this, CurrentHit.ImpactPoint, Impulse);
+				Damageable->ApplyDamage(BarDamage, this, CurrentHit.ImpactPoint, FVector::ZeroVector);
 
 				// call the BP handler to play effects, etc.
 				DealtDamage(MeleeDamage, CurrentHit.ImpactPoint);
@@ -290,6 +290,8 @@ void ACombatCharacter::DoAttackTrace(FName DamageSourceBone)
 
 void ACombatCharacter::CheckCombo()
 {
+	if (!HasCombo) return;
+	
 	// are we playing a non-charge attack animation?
 	if (bIsAttacking && !bIsChargingAttack)
 	{

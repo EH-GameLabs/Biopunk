@@ -221,6 +221,8 @@ void ACombatEnemy::ApplyDamage(float Damage, AActor* DamageCauser, const FVector
 
 void ACombatEnemy::HandleDeath()
 {
+	//TEST
+	CanTarget = false;
 	// hide the life bar
 	LifeBar->SetHiddenInGame(true);
 

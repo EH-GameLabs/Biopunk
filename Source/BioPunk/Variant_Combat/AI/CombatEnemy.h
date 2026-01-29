@@ -214,4 +214,7 @@ protected:
 
 	/** EndPlay cleanup */
 	virtual void EndPlay(EEndPlayReason::Type EndPlayReason) override;
+	
+public:
+	bool CanTarget = false;
 };
