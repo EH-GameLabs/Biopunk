@@ -109,7 +109,7 @@ protected:
 
 	/** Amount of damage a melee attack will deal */
 	UPROPERTY(EditAnywhere, Category="Melee Attack|Damage", meta = (ClampMin = 0, ClampMax = 100))
-	float MeleeDamage = 3.0f;
+	float MeleeDamage = 1.0f;
 
 	/** Amount of knockback impulse a melee attack will apply */
 	UPROPERTY(EditAnywhere, Category="Melee Attack|Damage", meta = (ClampMin = 0, ClampMax = 1000, Units = "cm/s"))
@@ -306,4 +306,9 @@ public:
 
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	
+public:
+	//TEST
+	UPROPERTY(BlueprintReadWrite, Category="Components")
+	float AttackSpeed = 1;
 };

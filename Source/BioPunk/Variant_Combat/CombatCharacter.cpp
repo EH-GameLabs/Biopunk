@@ -184,7 +184,10 @@ void ACombatCharacter::ComboAttack()
 	// play the attack montage
 	if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
 	{
-		const float MontageLength = AnimInstance->Montage_Play(ComboAttackMontage, 1.0f, EMontagePlayReturnType::MontageLength, 0.0f, true);
+		//TEST
+		
+		
+		const float MontageLength = AnimInstance->Montage_Play(ComboAttackMontage, AttackSpeed, EMontagePlayReturnType::MontageLength, 0.0f, true);
 
 		// subscribe to montage completed and interrupted events
 		if (MontageLength > 0.0f)

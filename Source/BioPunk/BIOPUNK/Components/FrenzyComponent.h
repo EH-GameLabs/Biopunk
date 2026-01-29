@@ -31,7 +31,8 @@ struct FBarData
 	bool HasAbility;
 };
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnFrenzyBarChanged, int, index);
+UCLASS( ClassGroup=(Custom), Blueprintable, BlueprintType, meta=(BlueprintSpawnableComponent) )
 class BIOPUNK_API UFrenzyComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -91,5 +92,11 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	
+	UPROPERTY(BlueprintAssignable, Category="FrenzyComponent")
+	FOnFrenzyBarChanged OnBarChangedDelegate;
+	
+	UFUNCTION(BlueprintCallable, Category="FrenzyComponent")
+	void BarChanged(int index);
 	
 };

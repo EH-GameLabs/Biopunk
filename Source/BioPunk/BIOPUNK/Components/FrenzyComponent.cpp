@@ -10,6 +10,7 @@ UFrenzyComponent::UFrenzyComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
+	
 	// ...
 }
 
@@ -20,7 +21,7 @@ void UFrenzyComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
+	OnBarChangedDelegate.AddDynamic(this, &UFrenzyComponent::BarChanged);
 }
 
 // Called every frame
@@ -38,6 +39,16 @@ void UFrenzyComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	// TODO: 
 	// anche gli altri valori sono moltiplicati dal DecreaseMultiplier?
 	DecreaseBar(DeltaTime * BarStats[BarIndex].DecreaseMultiplier);
+}
+
+void UFrenzyComponent::BarChanged(int index)
+{
+	GEngine->AddOnScreenDebugMessage(
+		-1,
+		2.0f,
+		FColor::Black,
+		FString::Printf(TEXT("New bar index: %d"), index)
+	);
 }
 
 void UFrenzyComponent::IncreaseBar(const float Value)
@@ -73,6 +84,7 @@ void UFrenzyComponent::IncreaseBar(const float Value)
 		else
 		{
 			BarIndex++;
+			OnBarChangedDelegate.Broadcast(BarIndex);
 			BarValue = Scarto;
 		}
 	}
@@ -98,6 +110,7 @@ void UFrenzyComponent::DecreaseBar(const float Value)
 		else
 		{
 			BarIndex--;
+			OnBarChangedDelegate.Broadcast(BarIndex);
 			BarValue = 1.0f;
 		}
 	}
@@ -110,6 +123,7 @@ void UFrenzyComponent::StartDebuff()
 	// TODO: 
 	// da capire
 	BarIndex = 0;
+	OnBarChangedDelegate.Broadcast(BarIndex);
 	
 	// movimento più lento ?
 	
