@@ -145,6 +145,12 @@ protected:
 	/** Name of the AnimMontage section that corresponds to the attack */
 	UPROPERTY(EditAnywhere, Category="Melee Attack|Charged")
 	FName ChargeAttackSection;
+	
+	UPROPERTY(EditAnywhere, Category ="Input")
+	UInputAction* InteractAction;
+	
+	UPROPERTY(EditAnywhere, Category ="Input")
+	UInputAction* DashAction;
 
 	/** Flag that determines if the player is currently holding the charged attack input */
 	bool bIsChargingAttack = false;
@@ -220,6 +226,24 @@ public:
 	/** Handles charged attack released from either controls or UI interfaces */
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoChargedAttackEnd();
+	
+	// ===== NUOVE FUNZIONI =====
+	UFUNCTION(BlueprintCallable, Category="Input")
+	virtual void DoInteract();
+	
+	UFUNCTION(BlueprintCallable, Category="Input")
+	virtual void DoDash();
+	
+protected:
+	UPROPERTY(EditAnywhere, Category="Animation|Dash")
+	UAnimMontage* DashMontage;
+	
+	UPROPERTY(EditAnywhere, Category="Animation|Dash")
+	TArray<FName> DashSectionNames;
+	
+	FOnMontageEnded OnDashMontageEnded;
+	bool bIsDashing = false;
+	FVector2D MovementVector;
 
 protected:
 

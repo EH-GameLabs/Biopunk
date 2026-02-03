@@ -15,6 +15,8 @@
 #include "TimerManager.h"
 #include "Engine/LocalPlayer.h"
 #include "CombatPlayerController.h"
+#include "BIOPUNK/Interfaces/Interactable.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 ACombatCharacter::ACombatCharacter()
 {
@@ -54,7 +56,9 @@ ACombatCharacter::ACombatCharacter()
 void ACombatCharacter::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
-	FVector2D MovementVector = Value.Get<FVector2D>();
+	MovementVector = Value.Get<FVector2D>();
+	
+	if (bIsDashing) return;
 
 	// route the input
 	DoMove(MovementVector.X, MovementVector.Y);
@@ -161,6 +165,103 @@ void ACombatCharacter::DoChargedAttackEnd()
 	if (bHasLoopedChargedAttack)
 	{
 		CheckChargedAttack();
+	}
+}
+
+void ACombatCharacter::DoInteract()
+{
+	// se il gioco non è attivo return
+	// if ()
+	
+	// sphere overlap per vedere con cosa posso interagire
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(this);
+	
+	FCollisionObjectQueryParams ObjectQueryParams;
+	ObjectQueryParams.AddObjectTypesToQuery(ECC_Visibility);
+	
+	const FVector StartLocation = GetActorLocation();
+	const float InteractionRadius = 500.f;
+	TArray<FHitResult> HitResults;
+	
+	bool bHasHit = GetWorld()->SweepMultiByObjectType(
+		HitResults,
+		StartLocation,
+		StartLocation,
+		FQuat::Identity,
+		ObjectQueryParams,
+		FCollisionShape::MakeSphere(InteractionRadius),
+		QueryParams
+	);
+	
+	DrawDebugSphere(GetWorld(), StartLocation, InteractionRadius, 32, FColor::Red, false, 2.0f);
+	
+	if (!bHasHit) return;
+	
+	IInteractable* Interactable = nullptr;
+	float BestDotProduct = -1.0f;
+	
+	for (FHitResult Hit : HitResults)
+	{
+		if (!Hit.GetActor()->Implements<UInteractable>()) continue;
+		
+		IInteractable* HitActor = Cast<IInteractable>(Hit.GetActor());
+		
+		FVector DirectionToTarget = Hit.GetActor()->GetActorLocation() - StartLocation;
+		float Dot = FVector::DotProduct(GetActorForwardVector(), DirectionToTarget);
+		
+		if (Dot > BestDotProduct && Dot > 0.5f) // forse meglio fare una var ? (per l'angolo)
+		{
+			BestDotProduct = Dot;
+			Interactable = HitActor;
+		}
+	}
+	
+	if (!Interactable) return;
+	Interactable->Interact(this);
+}
+
+void ACombatCharacter::DoDash()
+{
+	GEngine->AddOnScreenDebugMessage(
+		-1,
+		2.0f,
+		FColor::Green,
+		FString::Printf(TEXT("DASHED"))
+	);
+	
+	// raise the dashing flag
+	bIsDashing = true;
+	
+	// select right direction dash
+	UAnimMontage* DashMontage = nullptr;
+	
+	++ComboCount;
+
+	// do we still have a combo section to play?
+	if (ComboCount < DashSectionNames.Num())
+	{
+		// jump to the next combo section
+		if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
+		{
+			AnimInstance->Montage_JumpToSection(DashSectionNames[ComboCount], ComboAttackMontage);
+		}
+	}
+
+	// Set invincibility true
+	// Check if Perfect Dodge
+
+	// play the attack montage
+	if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
+	{
+		const float MontageLength = AnimInstance->Montage_Play(DashMontage, 1.0f, EMontagePlayReturnType::MontageLength, 0.0f, true);
+
+		// subscribe to montage completed and interrupted events
+		if (MontageLength > 0.0f)
+		{
+			// set the end delegate for the montage
+			AnimInstance->Montage_SetEndDelegate(OnDashMontageEnded, DashMontage);
+		}
 	}
 }
 
@@ -475,6 +576,9 @@ void ACombatCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		// Charged Attack
 		EnhancedInputComponent->BindAction(ChargedAttackAction, ETriggerEvent::Started, this, &ACombatCharacter::ChargedAttackPressed);
 		EnhancedInputComponent->BindAction(ChargedAttackAction, ETriggerEvent::Completed, this, &ACombatCharacter::ChargedAttackReleased);
+		
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &ACombatCharacter::DoInteract);
+		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Triggered, this, &ACombatCharacter::DoDash);
 	}
 }
 
