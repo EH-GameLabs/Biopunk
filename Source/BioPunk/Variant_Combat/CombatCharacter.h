@@ -231,18 +231,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoInteract();
 	
-	UFUNCTION(BlueprintCallable, Category="Input")
-	virtual void DoDash();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Input")
+	void DoDash();
 	
 protected:
-	UPROPERTY(EditAnywhere, Category="Animation|Dash")
-	UAnimMontage* DashMontage;
 	
-	UPROPERTY(EditAnywhere, Category="Animation|Dash")
-	TArray<FName> DashSectionNames;
-	
-	FOnMontageEnded OnDashMontageEnded;
+	UPROPERTY(BlueprintReadWrite, Category="Dash")
 	bool bIsDashing = false;
+	
+	UPROPERTY(BlueprintReadWrite, Category="Dash")
 	FVector2D MovementVector;
 
 protected:

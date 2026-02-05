@@ -221,7 +221,7 @@ void ACombatCharacter::DoInteract()
 	Interactable->Interact(this);
 }
 
-void ACombatCharacter::DoDash()
+void ACombatCharacter::DoDash_Implementation()
 {
 	GEngine->AddOnScreenDebugMessage(
 		-1,
@@ -229,40 +229,6 @@ void ACombatCharacter::DoDash()
 		FColor::Green,
 		FString::Printf(TEXT("DASHED"))
 	);
-	
-	// raise the dashing flag
-	bIsDashing = true;
-	
-	// select right direction dash
-	UAnimMontage* DashMontage = nullptr;
-	
-	++ComboCount;
-
-	// do we still have a combo section to play?
-	if (ComboCount < DashSectionNames.Num())
-	{
-		// jump to the next combo section
-		if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
-		{
-			AnimInstance->Montage_JumpToSection(DashSectionNames[ComboCount], ComboAttackMontage);
-		}
-	}
-
-	// Set invincibility true
-	// Check if Perfect Dodge
-
-	// play the attack montage
-	if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
-	{
-		const float MontageLength = AnimInstance->Montage_Play(DashMontage, 1.0f, EMontagePlayReturnType::MontageLength, 0.0f, true);
-
-		// subscribe to montage completed and interrupted events
-		if (MontageLength > 0.0f)
-		{
-			// set the end delegate for the montage
-			AnimInstance->Montage_SetEndDelegate(OnDashMontageEnded, DashMontage);
-		}
-	}
 }
 
 void ACombatCharacter::ResetHP()
