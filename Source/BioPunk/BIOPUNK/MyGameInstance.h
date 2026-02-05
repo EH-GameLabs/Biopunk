@@ -22,6 +22,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void MainMenu();
 	
+	
+	UFUNCTION(BlueprintCallable)
+	void Settings();
+	
 	UFUNCTION(BlueprintCallable)
 	void GameOverMenu();
 	
@@ -36,6 +40,11 @@ void UMyGameInstance::StartGame()
 void UMyGameInstance::MainMenu()
 {
 	UGameplayStatics::OpenLevel(this, FName("Lvl_MainMenu"));
+}
+
+void UMyGameInstance::Settings()
+{
+	UGameplayStatics::OpenLevel(this, FName("Lvl_Settings"));
 }
 
 void UMyGameInstance::GameOverMenu()
