@@ -32,7 +32,7 @@ protected:
 	float MinPitch = -10.0f; // Limite guardando in basso
 	
 	UPROPERTY(EditAnywhere, Category="Targeting")
-	float MaxPitch = 45.0f;  // Limite guardando in alto (evita il "collo spezzato")
+	float MaxPitch = 45.0f;  // Limite guardando in alto 
 
 	// Riferimento al target attuale
 	UPROPERTY(BlueprintReadOnly, Category="Targeting")

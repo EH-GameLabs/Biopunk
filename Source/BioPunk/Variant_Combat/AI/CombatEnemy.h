@@ -151,6 +151,12 @@ public:
 
 	/** Performs an AI-initiated combo attack. Number of hits will be decided by this character */
 	void DoAIComboAttack();
+	
+	UFUNCTION(BlueprintCallable, Category="Combat")
+	void PerformAttack() {DoAIComboAttack();}
+	
+	UPROPERTY(BlueprintReadOnly, Category="Combat")
+	float attackTimer;
 
 	/** Performs an AI-initiated charged attack. Charge time will be decided by this character */
 	void DoAIChargedAttack();
