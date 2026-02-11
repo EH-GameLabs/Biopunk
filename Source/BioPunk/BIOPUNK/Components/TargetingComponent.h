@@ -27,6 +27,12 @@ protected:
 	
 	UPROPERTY(EditAnywhere, Category="Targeting")
 	float LockRotationSpeed = 5.0f;
+	
+	UPROPERTY(EditAnywhere, Category="Targeting")
+	float MinPitch = -10.0f; // Limite guardando in basso
+	
+	UPROPERTY(EditAnywhere, Category="Targeting")
+	float MaxPitch = 45.0f;  // Limite guardando in alto (evita il "collo spezzato")
 
 	// Riferimento al target attuale
 	UPROPERTY(BlueprintReadOnly, Category="Targeting")

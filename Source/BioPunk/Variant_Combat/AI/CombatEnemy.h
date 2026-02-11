@@ -216,5 +216,5 @@ protected:
 	virtual void EndPlay(EEndPlayReason::Type EndPlayReason) override;
 	
 public:
-	bool CanTarget = false;
+	bool CanTarget = true;
 };

@@ -60,6 +60,9 @@ void UTargetingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 		FVector CameraLoc = PC->PlayerCameraManager->GetCameraLocation();
 		FVector Dir = TargetLoc - CameraLoc; 
 		FRotator TargetRot = Dir.Rotation();
+
+		// 3. Clampa il Pitch
+		TargetRot.Pitch = FMath::Clamp(TargetRot.Pitch, MinPitch, MaxPitch);
 		
 		DrawDebugSphere(
 			GetWorld(),
@@ -139,13 +142,14 @@ AActor* UTargetingComponent::FindBestTarget()
 		}
 	}
 	
-	if (BestTarget)
+	
+	if (IsValid(BestTarget))
 	{
 		// Qui attiveresti l'icona UI sul target
-		
+		UE_LOG(LogTemp, Warning, TEXT("Check Target: %s"), BestTarget ? *BestTarget->GetName() : TEXT("NULL"));
 		return BestTarget;
 	}
-	
+	UE_LOG(LogTemp, Warning, TEXT("Check Target: %s"), BestTarget ? *BestTarget->GetName() : TEXT("NULL"));
 	return nullptr;
 }
 
