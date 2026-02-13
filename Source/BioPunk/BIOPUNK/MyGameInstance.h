@@ -34,6 +34,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void LoseMenu();
+	
+	UFUNCTION(BlueprintCallable)
+	void Credits();
 };
 void UMyGameInstance::StartGame()
 {
@@ -63,4 +66,9 @@ void UMyGameInstance::WinMenu()
 void UMyGameInstance::LoseMenu()
 {
 	UGameplayStatics::OpenLevel(this, FName("Lvl_LoseMenu"));
+}
+
+void UMyGameInstance::Credits()
+{
+	UGameplayStatics::OpenLevel(this, FName("Lvl_Credits"));
 }
