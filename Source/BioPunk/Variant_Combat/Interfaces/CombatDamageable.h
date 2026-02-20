@@ -10,6 +10,7 @@
  *  CombatDamageable interface
  *  Provides functionality to handle damage, healing, knockback and death
  */
+//UINTERFACE(MinimalAPI, NotBlueprintable)
 UINTERFACE(MinimalAPI, NotBlueprintable)
 class UCombatDamageable : public UInterface
 {
