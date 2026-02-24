@@ -25,5 +25,5 @@ protected:
 	void ToggleTargetLock();
 	
 	virtual void DoLook(float Yaw, float Pitch) override;
-
+	
 };

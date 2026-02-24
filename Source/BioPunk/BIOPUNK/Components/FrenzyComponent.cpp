@@ -36,9 +36,8 @@ void UFrenzyComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 		FString::Printf(TEXT("%d: %.2f"), BarIndex, BarValue)
 	);
 	
-	// TODO: 
-	// anche gli altri valori sono moltiplicati dal DecreaseMultiplier?
-	DecreaseBar(DeltaTime * BarStats[BarIndex].DecreaseMultiplier);
+	if (BarIndex != 2 && IsLastPhaseActive) return;
+	DecreaseBar(DeltaTime * DecreaseBarOnTime);
 }
 
 void UFrenzyComponent::BarChanged(int index)
@@ -55,64 +54,45 @@ void UFrenzyComponent::IncreaseBar(const float Value)
 {
 	if (IsInDebuff) return;
 	
-	// GEngine->AddOnScreenDebugMessage(
-	// 	-1,
-	// 	2.0f,
-	// 	FColor::Red,
-	// 	FString::Printf(TEXT("Hitler"))
-	// );
-	
-	// TODO:
-	// teniamo i valori di scarto? 
-	// oppure quando si passa da una barra all'altra si parte sempre da 0?
-	
 	const float IncreaseValue = Value * BarStats[BarIndex].IncreaseMultiplier;
-	
-	// BarValue = FMath::Min(BarValue + IncreaseValue, 1.0f); 
 	BarValue += IncreaseValue;
 	
 	const float Scarto = FMath::Max(BarValue - 1, 0.0f);
 	
 	// Check Bar
-	if (BarValue >= 1.0f)
+	if (Scarto <= 0.0f) return;
+	
+	if (BarIndex == 2)
 	{
-		if (BarIndex == 2)
-		{
-			HasReachedMax = true;
-			BarValue = 1;
-		}
-		else
-		{
-			BarIndex++;
-			OnBarChangedDelegate.Broadcast(BarIndex);
-			BarValue = Scarto;
-		}
+		BarValue = 1;
+	}
+	else
+	{
+		BarIndex++;
+		OnBarChangedDelegate.Broadcast(BarIndex);
+		BarValue = Scarto;
 	}
 }
 
 void UFrenzyComponent::DecreaseBar(const float Value)
 {
-	
 	BarValue = FMath::Max(BarValue - Value, 0.0f);
 	
 	if (BarIndex == 0) return;
 	
 	if (BarValue <= 0.0f)
 	{
-		// if (BarIndex == 2)
-		// {
-		if (HasReachedMax)
+		if (IsLastPhaseActive)
 		{
-			HasReachedMax = false;
 			StartDebuff();
 		}
-		// }
 		else
 		{
 			BarIndex--;
-			OnBarChangedDelegate.Broadcast(BarIndex);
 			BarValue = 1.0f;
 		}
+		
+		OnBarChangedDelegate.Broadcast(BarIndex);
 	}
 }
 
@@ -120,15 +100,14 @@ void UFrenzyComponent::StartDebuff()
 {
 	IsInDebuff = true;
 	
-	// TODO: 
-	// da capire
 	BarIndex = 0;
+	BarValue = 0;
 	OnBarChangedDelegate.Broadcast(BarIndex);
 	
-	// movimento più lento ?
+	// subisci più danni
 	
-	// subisci più danni ?
 	
+	// RESET
 	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
 
 	if (TimerManager.IsTimerActive(TimerHandle_Debuff))

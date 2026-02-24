@@ -14,15 +14,9 @@ struct FBarData
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float IncreaseMultiplier = 1.0f;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float DecreaseMultiplier = 1.0f;
-	
 	// ===== BUFF =====
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float DamageMultiplier = 1.0f;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float AttackSpeedMultiplier = 1.0f;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool HasCombo;
@@ -50,35 +44,32 @@ protected:
 	
 	int8 BarIndex = 0;
 	float BarValue = 0.0f; // DA 0 A 1 --> SEMPRE
-	bool HasReachedMax;
+	// bool HasReachedMax;
 	bool IsInDebuff;
-	bool IsInCombat;
+	bool IsInCombat; // TODO: spostare in un manager (Combat Manager ?)
+	bool IsLastPhaseActive;
 	FTimerHandle TimerHandle_Debuff;
 	
 	// RECHARGE
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FrenzyComponent|RECHARGE")
-	float IncreaseOnHit = 0.1f;
+	float IncreaseBarOnHit = 0.1f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FrenzyComponent|RECHARGE")
-	float IncreaseOnPerfectDodge = 0.3f;
+	float IncreaseBarOnPerfectDodge = 0.3f;
 	
 	// DISCHARGE
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FrenzyComponent|DISCHARGE")
-	float DecreaseOnTakeDamage = 0.07f;
+	float DecreaseBarOnTime = 1.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FrenzyComponent|DISCHARGE")
-	float DecreaseOnAbilityUse = 0.6f;
+	float DecreaseBarOnTakeDamage = 0.07f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FrenzyComponent|DISCHARGE")
+	float DecreaseBarOnAbilityUse = 0.6f;
 	
 	// -------------- DEBUFF --------------------
 	// barra non si ricarica per “rechargeTime” sec
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FrenzyComponent|Debuff")
 	float StopRechargeTime; 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FrenzyComponent|Debuff")
-	float DebuffSpeed;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FrenzyComponent|Debuff")
-	float DebuffDamage;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FrenzyComponent|Debuff")
-	float DischargingTimer;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FrenzyComponent|Debuff")// si scarica nel tempo
-	float DischargingMultiplierMax;
+	float DebuffDamageTakenMultiplier = 1.0f;
 	
 	
 	UFUNCTION(BlueprintCallable, Category="FrenzyComponent")
