@@ -92,7 +92,7 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Input")
 	void DoDash();
 	
-protected:
+public:
 	
 	UPROPERTY(BlueprintReadWrite, Category="Dash")
 	bool bIsDashing = false;

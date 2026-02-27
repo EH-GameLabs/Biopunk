@@ -3,6 +3,8 @@
 
 #include "BIOPUNK/Components/HealthComponent.h"
 
+#include "BIOPUNK/Core/CleanCharacter.h"
+
 // Sets default values for this component's properties
 UHealthComponent::UHealthComponent()
 {
@@ -35,6 +37,12 @@ void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 void UHealthComponent::NativeTakeDamage(AActor* Interactor, float Damage)
 {
 	IDamageable::NativeTakeDamage(Interactor, Damage);
+	
+	AActor* owner = GetOwner();
+	if (ACleanCharacter* Character = Cast<ACleanCharacter>(owner))
+	{
+		if (Character->bIsDashing) return;
+	}
 	
 	SetHealth(Health - Damage);
 	
