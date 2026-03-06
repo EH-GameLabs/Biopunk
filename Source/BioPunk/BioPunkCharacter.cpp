@@ -65,6 +65,8 @@ void ABioPunkCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ABioPunkCharacter::Look);
+		
+		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Triggered, this, &ABioPunkCharacter::DoDash);
 	}
 	else
 	{
@@ -75,7 +77,7 @@ void ABioPunkCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 void ABioPunkCharacter::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
-	FVector2D MovementVector = Value.Get<FVector2D>();
+	MovementVector = Value.Get<FVector2D>();
 
 	// route the input
 	DoMove(MovementVector.X, MovementVector.Y);
@@ -130,4 +132,14 @@ void ABioPunkCharacter::DoJumpEnd()
 {
 	// signal the character to stop jumping
 	StopJumping();
+}
+
+void ABioPunkCharacter::DoDash_Implementation()
+{
+	GEngine->AddOnScreenDebugMessage(
+		-1,
+		2.0f,
+		FColor::Green,
+		FString::Printf(TEXT("DASHED"))
+	);
 }

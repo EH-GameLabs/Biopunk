@@ -36,7 +36,7 @@ void UFrenzyComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 		FString::Printf(TEXT("%d: %.2f"), BarIndex, BarValue)
 	);
 	
-	if (BarIndex != 2 && IsLastPhaseActive) return;
+	if (BarIndex != 2 && !IsLastPhaseActive) return;
 	DecreaseBar(DeltaTime * DecreaseBarOnTime);
 }
 

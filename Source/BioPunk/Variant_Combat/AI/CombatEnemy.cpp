@@ -11,6 +11,7 @@
 #include "TimerManager.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Animation/AnimInstance.h"
+#include "BIOPUNK/Components/HealthComponent.h"
 
 ACombatEnemy::ACombatEnemy()
 {
@@ -145,16 +146,16 @@ void ACombatEnemy::DoAttackTrace(FName DamageSourceBone)
 			if (CurrentHit.GetActor()->ActorHasTag(FName("Player")))
 			{
 				// check if the actor is damageable
-				ICombatDamageable* Damageable = Cast<ICombatDamageable>(CurrentHit.GetActor());
+				UHealthComponent* PlayerHealth = CurrentHit.GetActor()->GetComponentByClass<UHealthComponent>();
 
-				if (Damageable)
+				if (PlayerHealth)
 				{
 					// knock upwards and away from the impact normal
-					const FVector Impulse = (CurrentHit.ImpactNormal * -MeleeKnockbackImpulse) + (FVector::UpVector * MeleeLaunchImpulse);
+					// const FVector Impulse = (CurrentHit.ImpactNormal * -MeleeKnockbackImpulse) + (FVector::UpVector * MeleeLaunchImpulse);
 
 					// pass the damage event to the actor
-					Damageable->ApplyDamage(MeleeDamage, this, CurrentHit.ImpactPoint, Impulse);
-
+					PlayerHealth->TakeDamage(this, MeleeDamage);
+					return;
 				}
 			}
 		}

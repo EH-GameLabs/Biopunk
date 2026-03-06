@@ -48,6 +48,10 @@ protected:
 	/** Mouse Look Input Action */
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* MouseLookAction;
+	
+	/** Dash Input Action */
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* DashAction;
 
 public:
 
@@ -84,6 +88,17 @@ public:
 	/** Handles jump pressed inputs from either controls or UI interfaces */
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoJumpEnd();
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Input")
+	void DoDash();
+	
+public:
+	
+	UPROPERTY(BlueprintReadWrite, Category="Dash")
+	bool bIsDashing = false;
+	
+	UPROPERTY(BlueprintReadWrite, Category="Dash")
+	FVector2D MovementVector;
 
 public:
 
