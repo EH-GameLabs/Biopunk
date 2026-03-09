@@ -6,6 +6,7 @@
 #include "CombatEnemy.h"
 #include "KismetTraceUtils.h"
 #include "BIOPUNK/Interfaces/TargetableInterface.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values for this component's properties
@@ -86,7 +87,7 @@ void UTargetingComponent::ToggleLock()
 {
 	if (CurrentTarget != nullptr)
 	{
-		CurrentTarget = nullptr;
+		DisableLock();
 		return;
 	}
 	
@@ -147,6 +148,7 @@ AActor* UTargetingComponent::FindBestTarget()
 	{
 		// Qui attiveresti l'icona UI sul target
 		UE_LOG(LogTemp, Warning, TEXT("Check Target: %s"), BestTarget ? *BestTarget->GetName() : TEXT("NULL"));
+		UpdateRotationSettings(true);
 		return BestTarget;
 	}
 	UE_LOG(LogTemp, Warning, TEXT("Check Target: %s"), BestTarget ? *BestTarget->GetName() : TEXT("NULL"));
@@ -155,5 +157,27 @@ AActor* UTargetingComponent::FindBestTarget()
 
 void UTargetingComponent::DisableLock()
 {
+	UpdateRotationSettings(false);
 	CurrentTarget = nullptr;
+}
+
+void UTargetingComponent::UpdateRotationSettings(bool locked)
+{
+	// 1. Recupera il proprietario del componente e fai il cast a ACharacter
+	ACharacter* ParentCharacter = Cast<ACharacter>(GetOwner());
+
+	// 2. Controlla che il puntatore sia valido per evitare crash
+	if (ParentCharacter)
+	{
+		// 3. Recupera il Character Movement Component
+		UCharacterMovementComponent* MovementComp = ParentCharacter->GetCharacterMovement();
+
+		// 4. Verifica il componente e modifica le variabili
+		if (MovementComp)
+		{
+			// Imposta i valori secondo le tue necessità
+			MovementComp->bUseControllerDesiredRotation = locked;
+			MovementComp->bOrientRotationToMovement = !locked;    
+		}
+	}
 }
