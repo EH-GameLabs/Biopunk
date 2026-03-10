@@ -42,8 +42,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FrenzyComponent")
 	TArray<FBarData> BarStats;
 	
-	int8 BarIndex = 0;
-	float BarValue = 0.0f; // DA 0 A 1 --> SEMPRE
 	// bool HasReachedMax;
 	bool IsInDebuff;
 	bool IsInCombat; // TODO: spostare in un manager (Combat Manager ?)
@@ -90,4 +88,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category="FrenzyComponent")
 	void BarChanged(int index);
 	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="FrenzyComponent")
+	int BarIndex = 0;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="FrenzyComponent")
+	float BarValue = 0.0f; // DA 0 A 1 --> SEMPRE
 };

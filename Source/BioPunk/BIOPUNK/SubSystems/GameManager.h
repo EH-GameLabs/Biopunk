@@ -4,14 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
-#include "GameManagerSubsystem.generated.h"
+#include "GameManager.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class BIOPUNK_API UGameManagerSubsystem : public UGameInstanceSubsystem
+class BIOPUNK_API UGameManager : public UGameInstance
 {
 	GENERATED_BODY()
+	
+	
 	
 };

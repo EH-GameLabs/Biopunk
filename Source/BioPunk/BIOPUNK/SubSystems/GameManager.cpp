@@ -1,5 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BIOPUNK/SubSystems/GameManagerSubsystem.h"
+#include "BIOPUNK/SubSystems/GameManager.h"
 
