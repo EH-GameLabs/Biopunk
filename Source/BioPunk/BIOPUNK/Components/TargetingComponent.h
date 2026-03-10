@@ -41,6 +41,7 @@ protected:
 private:
 	AActor* FindBestTarget();
 	void DisableLock();
+	void UpdateRotationSettings(bool locked);
 	
 public:
 	bool IsLocked() const {return CurrentTarget != nullptr;}
