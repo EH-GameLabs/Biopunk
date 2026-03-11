@@ -33,6 +33,14 @@ void UFrenzyComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	DecreaseBar(DeltaTime * DecreaseBarOnTime);
 }
 
+void UFrenzyComponent::TriggerBarChange(int index)
+{
+	if (OnBarChangedDelegate.IsBound())
+	{
+		OnBarChangedDelegate.Broadcast(index);
+	}
+}
+
 void UFrenzyComponent::BarChanged(int index)
 {
 	GEngine->AddOnScreenDebugMessage(

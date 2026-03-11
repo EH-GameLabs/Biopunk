@@ -93,6 +93,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="FrenzyComponent")
 	FOnFrenzyBarChanged OnBarChangedDelegate;
 	
+	UFUNCTION(BlueprintCallable, Category = "FrenzyComponent")
+	void TriggerBarChange(int index);
+	
 	UFUNCTION(BlueprintCallable, Category="FrenzyComponent")
 	void BarChanged(int index);
 	
