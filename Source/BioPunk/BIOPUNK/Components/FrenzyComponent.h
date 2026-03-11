@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "HealthComponent.h"
 #include "Components/ActorComponent.h"
 #include "FrenzyComponent.generated.h"
 
@@ -26,6 +27,8 @@ struct FBarData
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnFrenzyBarChanged, int, index);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDamageMultiplierChangedSignature, float, NewMult);
+
 UCLASS( ClassGroup=(Custom), Blueprintable, BlueprintType, meta=(BlueprintSpawnableComponent) )
 class BIOPUNK_API UFrenzyComponent : public UActorComponent
 {
@@ -45,8 +48,10 @@ protected:
 	// bool HasReachedMax;
 	bool IsInDebuff;
 	bool IsInCombat; // TODO: spostare in un manager (Combat Manager ?)
-	bool IsLastPhaseActive;
 	FTimerHandle TimerHandle_Debuff;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FrenzyComponent")
+	bool IsLastPhaseActive;
 	
 	// RECHARGE
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="FrenzyComponent|RECHARGE")
@@ -77,6 +82,9 @@ protected:
 	
 	void StartDebuff();
 	void EndDebuff();
+	
+	UPROPERTY(BlueprintAssignable, Category="FrenzyComponent")
+	FOnDamageMultiplierChangedSignature OnDamageMultiplierChanged;
 
 public:	
 	// Called every frame
@@ -92,4 +100,7 @@ public:
 	int BarIndex = 0;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="FrenzyComponent")
 	float BarValue = 0.0f; // DA 0 A 1 --> SEMPRE
+	
+	UFUNCTION(blueprintCallable, BlueprintNativeEvent, Category="FrenzyComponent")
+	void ActivateLastPhase();
 };
