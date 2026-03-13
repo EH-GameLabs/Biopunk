@@ -31,6 +31,9 @@ protected:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Health")
 	float Health;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Health")
+	float DamageMultiplier = 1;
 
 public:	
 	// Called every frame

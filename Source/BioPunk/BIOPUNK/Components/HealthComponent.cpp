@@ -44,7 +44,8 @@ void UHealthComponent::NativeTakeDamage(AActor* Interactor, float Damage)
 		if (Character->bIsDashing) return;
 	}
 	
-	SetHealth(Health - Damage);
+	float RealDamage = Damage * DamageMultiplier;
+	SetHealth(Health - RealDamage);
 	
 	// lancio evento di TakeDamage
 	OnTakeDamage.Broadcast(Damage);

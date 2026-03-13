@@ -29,15 +29,16 @@ void UFrenzyComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
-	GEngine->AddOnScreenDebugMessage(
-		67,
-		2.0f,
-		FColor::Red,
-		FString::Printf(TEXT("%d: %.2f"), BarIndex, BarValue)
-	);
-	
-	if (BarIndex != 2 && !IsLastPhaseActive) return;
+	if (BarIndex != 2 || !IsLastPhaseActive) return;
 	DecreaseBar(DeltaTime * DecreaseBarOnTime);
+}
+
+void UFrenzyComponent::TriggerBarChange(int index)
+{
+	if (OnBarChangedDelegate.IsBound())
+	{
+		OnBarChangedDelegate.Broadcast(index);
+	}
 }
 
 void UFrenzyComponent::BarChanged(int index)
@@ -48,6 +49,14 @@ void UFrenzyComponent::BarChanged(int index)
 		FColor::Black,
 		FString::Printf(TEXT("New bar index: %d"), index)
 	);
+}
+
+void UFrenzyComponent::ActivateLastPhase_Implementation()
+{
+	if (BarIndex != 2 || IsLastPhaseActive) return;
+	
+	IsLastPhaseActive = true;
+	OnDamageMultiplierChanged.Broadcast(DebuffDamageTakenMultiplier);
 }
 
 void UFrenzyComponent::IncreaseBar(const float Value)
@@ -98,6 +107,7 @@ void UFrenzyComponent::DecreaseBar(const float Value)
 
 void UFrenzyComponent::StartDebuff()
 {
+	IsLastPhaseActive = false;
 	IsInDebuff = true;
 	
 	BarIndex = 0;
@@ -105,7 +115,7 @@ void UFrenzyComponent::StartDebuff()
 	OnBarChangedDelegate.Broadcast(BarIndex);
 	
 	// subisci più danni
-	
+	OnDamageMultiplierChanged.Broadcast(DebuffDamageTakenMultiplier);
 	
 	// RESET
 	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
@@ -128,7 +138,6 @@ void UFrenzyComponent::EndDebuff()
 {
 	IsInDebuff = false;
 	
-	// movimento torna normale ?
-	
-	// subisci danni normali ?
+	// subisci danni normali
+	OnDamageMultiplierChanged.Broadcast(1);
 }

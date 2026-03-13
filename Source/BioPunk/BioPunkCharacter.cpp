@@ -56,7 +56,7 @@ void ABioPunkCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
+		//EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
 		// Moving
@@ -125,7 +125,7 @@ void ABioPunkCharacter::DoLook(float Yaw, float Pitch)
 void ABioPunkCharacter::DoJumpStart()
 {
 	// signal the character to jump
-	Jump();
+	//Jump();
 }
 
 void ABioPunkCharacter::DoJumpEnd()
