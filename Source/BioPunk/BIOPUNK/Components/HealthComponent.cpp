@@ -23,6 +23,7 @@ void UHealthComponent::BeginPlay()
 
 	// ...
 	OnDie.AddDynamic(this, &UHealthComponent::Die);
+	Health = MaxHealth;
 }
 
 
