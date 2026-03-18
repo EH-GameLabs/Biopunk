@@ -22,7 +22,7 @@ void UHealthComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	OnDie.AddDynamic(this, &UHealthComponent::NativeDie);
+	OnDie.AddDynamic(this, &UHealthComponent::Die);
 }
 
 

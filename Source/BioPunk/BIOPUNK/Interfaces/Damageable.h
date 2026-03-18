@@ -40,7 +40,8 @@ public:
 	
 	// ===== DIE =====
 	// Die general version to call in c++
-	void Die() { NativeDie(); }
+	UFUNCTION()
+	virtual void Die() { NativeDie(); }
 
 	// Die to implement in c++
 	virtual void NativeDie()
