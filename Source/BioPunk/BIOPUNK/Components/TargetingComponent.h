@@ -7,7 +7,7 @@
 #include "TargetingComponent.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable)
 class BIOPUNK_API UTargetingComponent : public UActorComponent
 {
 	GENERATED_BODY()

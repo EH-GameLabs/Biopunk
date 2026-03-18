@@ -29,7 +29,7 @@ struct FBarData
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnFrenzyBarChanged, int, index);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDamageMultiplierChangedSignature, float, NewMult);
 
-UCLASS( ClassGroup=(Custom), Blueprintable, BlueprintType, meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable)
 class BIOPUNK_API UFrenzyComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -101,8 +101,10 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="FrenzyComponent")
 	int BarIndex = 0;
+	
+	// DA 0 A 1 --> SEMPRE
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="FrenzyComponent")
-	float BarValue = 0.0f; // DA 0 A 1 --> SEMPRE
+	float BarValue = 0.0f; 
 	
 	UFUNCTION(blueprintCallable, BlueprintNativeEvent, Category="FrenzyComponent")
 	void ActivateLastPhase();

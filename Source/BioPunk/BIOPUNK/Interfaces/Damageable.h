@@ -46,7 +46,8 @@ public:
 	// Die to implement in c++
 	virtual void NativeDie()
 	{
-		BP_Die();
+		UObject* Object = Cast<UObject>(this);
+		Execute_BP_Die(Object);
 	}
 
 	// Die to implement in blueprint

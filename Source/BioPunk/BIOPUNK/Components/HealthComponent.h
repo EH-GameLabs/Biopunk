@@ -13,7 +13,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTakeDamageSignature, int32, Damag
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChangeSignature, int32, NewHealth);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDieSignature);
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable)
 class BIOPUNK_API UHealthComponent : public UActorComponent, public IDamageable
 {
 	GENERATED_BODY()
