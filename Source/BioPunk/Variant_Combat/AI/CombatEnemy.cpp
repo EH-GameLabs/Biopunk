@@ -201,24 +201,24 @@ void ACombatEnemy::ApplyDamage(float Damage, AActor* DamageCauser, const FVector
 	if (ActualDamage > 0.0f)
 	{
 		// apply the knockback impulse
-		GetCharacterMovement()->AddImpulse(DamageImpulse, true);
+		//GetCharacterMovement()->AddImpulse(DamageImpulse, true);
 
 		// is the character ragdolling?
-		if (GetMesh()->IsSimulatingPhysics())
-		{
-			// apply an impulse to the ragdoll
-			GetMesh()->AddImpulseAtLocation(DamageImpulse * GetMesh()->GetMass(), DamageLocation);
-		}
+		// if (GetMesh()->IsSimulatingPhysics())
+		// {
+		// 	// apply an impulse to the ragdoll
+		// 	GetMesh()->AddImpulseAtLocation(DamageImpulse * GetMesh()->GetMass(), DamageLocation);
+		// }
 
 		// stop the attack montages to interrupt the attack
-		if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
-		{
-			AnimInstance->Montage_Stop(0.1f, ComboAttackMontage);
-			AnimInstance->Montage_Stop(0.1f, ChargedAttackMontage);
-		}
+		// if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
+		// {
+		// 	AnimInstance->Montage_Stop(0.1f, ComboAttackMontage);
+		// 	AnimInstance->Montage_Stop(0.1f, ChargedAttackMontage);
+		// }
 
 		// pass control to BP to play effects, etc.
-		ReceivedDamage(ActualDamage, DamageLocation, DamageImpulse.GetSafeNormal());
+		//ReceivedDamage(ActualDamage, DamageLocation, DamageImpulse.GetSafeNormal());
 	}
 }
 
@@ -279,8 +279,8 @@ float ACombatEnemy::TakeDamage(float Damage, struct FDamageEvent const& DamageEv
 		LifeBarWidget->SetLifePercentage(CurrentHP / MaxHP);
 
 		// enable partial ragdoll physics, but keep the pelvis vertical
-		GetMesh()->SetPhysicsBlendWeight(0.5f);
-		GetMesh()->SetBodySimulatePhysics(PelvisBoneName, false);
+		//GetMesh()->SetPhysicsBlendWeight(0.5f);
+		//GetMesh()->SetBodySimulatePhysics(PelvisBoneName, false);
 	}
 
 	// return the received damage amount
