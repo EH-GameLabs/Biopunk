@@ -2,6 +2,8 @@
 
 
 #include "CombatEnemy.h"
+
+#include "BrainComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "CombatAIController.h"
@@ -234,6 +236,15 @@ void ACombatEnemy::HandleDeath()
 	CanTarget = false;
 	// hide the life bar
 	LifeBar->SetHiddenInGame(true);
+	
+	AAIController* AICont = Cast<AAIController>(GetController());
+    
+	if (AICont && AICont->GetBrainComponent())
+	{
+		// 2. Ferma il Behavior Tree immediatamente
+		// Il parametro è una stringa che indica il motivo (utile per il debug)
+		AICont->GetBrainComponent()->StopLogic(TEXT("Enemy Died"));
+	}
 	
 	if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
 	{ AnimInstance->StopAllMontages(0); }
