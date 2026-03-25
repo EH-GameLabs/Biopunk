@@ -65,7 +65,13 @@ void ACombatEnemy::DoAIComboAttack()
 	{
 		const float MontageLength = AnimInstance->Montage_Play(ComboAttackMontage, 1.0f, EMontagePlayReturnType::MontageLength, 0.0f, true);
 
-		attackTimer = MontageLength;
+		
+		attackTimer = 0;
+
+		for (int i = 0; i < TargetComboCount; ++i)
+		{
+			attackTimer += ComboAttackMontage->GetSectionLength(i);
+		}
 		
 		// subscribe to montage completed and interrupted events
 		if (MontageLength > 0.0f)
