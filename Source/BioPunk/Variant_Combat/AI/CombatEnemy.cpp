@@ -56,8 +56,7 @@ void ACombatEnemy::DoAIComboAttack()
 
 	// choose how many times we're going to attack
 	TargetComboCount = FMath::RandRange(1, ComboSectionNames.Num() - 1);
-
-	// reset the attack counter
+// reset the attack counter
 	CurrentComboAttack = 0;
 
 	// play the attack montage
@@ -79,6 +78,7 @@ void ACombatEnemy::DoAIComboAttack()
 			// set the end delegate for the montage
 			AnimInstance->Montage_SetEndDelegate(OnAttackMontageEnded, ComboAttackMontage);
 		}
+	
 	}
 }
 
@@ -234,6 +234,9 @@ void ACombatEnemy::HandleDeath()
 	CanTarget = false;
 	// hide the life bar
 	LifeBar->SetHiddenInGame(true);
+	
+	if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
+	{ AnimInstance->StopAllMontages(0); }
 
 	// disable the collision capsule to avoid being hit again while dead
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
