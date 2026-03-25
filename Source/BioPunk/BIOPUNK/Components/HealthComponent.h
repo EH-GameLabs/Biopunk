@@ -44,9 +44,10 @@ public:
 	UFUNCTION()
 	virtual void NativeDie() override;
 	
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category = "Health")
 	inline float GetHealth() const { return Health; } 
 	
+	UFUNCTION(BlueprintCallable, Category = "Health")
 	void SetHealth(float const NewHealth);
 	
 	UPROPERTY(BlueprintAssignable)
