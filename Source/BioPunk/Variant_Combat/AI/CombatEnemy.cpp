@@ -2,6 +2,8 @@
 
 
 #include "CombatEnemy.h"
+
+#include "BrainComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "CombatAIController.h"
@@ -56,8 +58,7 @@ void ACombatEnemy::DoAIComboAttack()
 
 	// choose how many times we're going to attack
 	TargetComboCount = FMath::RandRange(1, ComboSectionNames.Num() - 1);
-
-	// reset the attack counter
+// reset the attack counter
 	CurrentComboAttack = 0;
 
 	// play the attack montage
@@ -65,7 +66,13 @@ void ACombatEnemy::DoAIComboAttack()
 	{
 		const float MontageLength = AnimInstance->Montage_Play(ComboAttackMontage, 1.0f, EMontagePlayReturnType::MontageLength, 0.0f, true);
 
-		attackTimer = MontageLength;
+		
+		attackTimer = 0;
+
+		for (int i = 0; i < TargetComboCount; ++i)
+		{
+			attackTimer += ComboAttackMontage->GetSectionLength(i);
+		}
 		
 		// subscribe to montage completed and interrupted events
 		if (MontageLength > 0.0f)
@@ -73,6 +80,7 @@ void ACombatEnemy::DoAIComboAttack()
 			// set the end delegate for the montage
 			AnimInstance->Montage_SetEndDelegate(OnAttackMontageEnded, ComboAttackMontage);
 		}
+	
 	}
 }
 
@@ -228,6 +236,18 @@ void ACombatEnemy::HandleDeath()
 	CanTarget = false;
 	// hide the life bar
 	LifeBar->SetHiddenInGame(true);
+	
+	AAIController* AICont = Cast<AAIController>(GetController());
+    
+	if (AICont && AICont->GetBrainComponent())
+	{
+		// 2. Ferma il Behavior Tree immediatamente
+		// Il parametro è una stringa che indica il motivo (utile per il debug)
+		AICont->GetBrainComponent()->StopLogic(TEXT("Enemy Died"));
+	}
+	
+	if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
+	{ AnimInstance->StopAllMontages(0); }
 
 	// disable the collision capsule to avoid being hit again while dead
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);

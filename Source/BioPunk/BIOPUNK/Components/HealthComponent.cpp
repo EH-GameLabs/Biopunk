@@ -39,11 +39,26 @@ void UHealthComponent::NativeTakeDamage(AActor* Interactor, float Damage)
 {
 	IDamageable::NativeTakeDamage(Interactor, Damage);
 	
+	FString InteractorName = Interactor ? Interactor->GetName() : TEXT("Unknown");
+	GEngine->AddOnScreenDebugMessage(
+		-1,
+		2.5f,
+		FColor::Red,
+		FString::Printf(TEXT("Damaged by: %s | Amount: %f"), *InteractorName, Damage)
+	);
+	
 	AActor* owner = GetOwner();
 	if (ACleanCharacter* Character = Cast<ACleanCharacter>(owner))
 	{
 		if (Character->bIsDashing) return;
 	}
+	
+	GEngine->AddOnScreenDebugMessage(
+		-1,
+		2.5f,
+		FColor::Black,
+		FString::Printf(TEXT("Damaged by: %s | Amount: %f"), *InteractorName, Damage)
+	);
 	
 	float RealDamage = Damage * DamageMultiplier;
 	SetHealth(Health - RealDamage);
@@ -68,7 +83,7 @@ void UHealthComponent::SetHealth(float const NewHealth)
 {
 	if (Health == NewHealth) return;
 	
-	Health = NewHealth;
+	Health = FMath::Min(NewHealth, MaxHealth);
 	
 	// lancio evento di cambio vita
 	OnHealthChange.Broadcast(NewHealth);
